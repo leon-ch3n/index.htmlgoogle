@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Odyssey - Your AI Travel Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --google-blue: #1a73e8;
+            --google-blue-hover: #1765cc;
+            --google-red: #ea4335;
+            --google-yellow: #fbbc04;
+            --google-green: #34a853;
+            --google-grey: #5f6368;
+            --google-grey-light: #f8f9fa;
+            --google-grey-border: #dadce0;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --background: #ffffff;
+            --surface: #ffffff;
+            --shadow-1: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+            --shadow-2: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+        }
+
+        body {
+            font-family: 'Roboto', 'Google Sans', Arial, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Google-style Header */
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--google-grey-border);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.1);
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Google Sans', sans-serif;
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .logo:hover {
+            opacity: 0.8;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            position: relative;
+        }
+
+        .logo-icon::before {
+            content: '✈';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            background: linear-gradient(45deg, var(--google-blue), var(--google-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Google-style Navigation */
+        nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-button {
+            padding: 8px 24px;
+            border: none;
+            background: none;
+            color: var(--text-secondary);
+            font-family: 'Google Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-button:hover {
+            background-color: var(--google-grey-light);
+        }
+
+        .nav-button:active {
+            background-color: #e8eaed;
+        }
+
+        .nav-button.primary {
+            background: var(--google-blue);
+            color: white;
+        }
+
+        .nav-button.primary:hover {
+            background: var(--google-blue-hover);
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 24px 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 56px;
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 48px;
+        }
+
+        /* Google Search Bar */
+        .search-container {
+            max-width: 584px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-box {
+            width: 100%;
+            height: 48px;
+            padding: 0 48px;
+            font-size: 16px;
+            font-family: 'Roboto', sans-serif;
+            border: 1px solid var(--google-grey-border);
+            border-radius: 24px;
+            outline: none;
+            transition: box-shadow 0.2s;
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+
+        .search-box:hover {
+            box-shadow: var(--shadow-1);
+        }
+
+        .search-box:focus {
+            box-shadow: var(--shadow-2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: #9aa0a6;
+        }
+
+        .search-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .search-button {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--google-blue);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .search-button:hover {
+            background: var(--google-blue-hover);
+        }
+
+        .search-button svg {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        /* Google-style Chips */
+        .suggestions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+
+        .chip {
+            padding: 8px 16px;
+            background: var(--surface);
+            border: 1px solid var(--google-grey-border);
+            border-radius: 16px;
+            font-size: 14px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Google Sans', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chip:hover {
+            background: var(--google-grey-light);
+            box-shadow: var(--shadow-1);
+        }
+
+        .chip:active {
+            background: #e8eaed;
+        }
+
+        /* Options Cards */
+        .options-grid {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .option-card {
+            background: var(--surface);
+            border: 1px solid var(--google-grey-border);
+            border-radius: 8px;
+            padding: 24px;
+            transition: box-shadow 0.2s;
+        }
+
+        .option-card:hover {
+            box-shadow: var(--shadow-1);
+        }
+
+        .option-label {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Google Material Slider */
+        .slider-container {
+            margin-top: 16px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+            position: relative;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--google-blue);
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            transition: box-shadow 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            box-shadow: 0 0 0 8px rgba(26,115,232,0.1);
+        }
+
+        .slider-value {
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--google-blue);
+            font-weight: 500;
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        /* Google Material Select */
+        .material-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--surface);
+            border: 1px solid var(--google-grey-border);
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-primary);
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .material-select:hover {
+            border-color: var(--text-primary);
+        }
+
+        .material-select:focus {
+            border-color: var(--google-blue);
+            border-width: 2px;
+            padding: 11px 15px;
+        }
+
+        /* Trending Section */
+        .trending-section {
+            background: var(--google-grey-light);
+            padding: 48px 24px;
+            margin-top: 48px;
+        }
+
+        .section-header {
+            max-width: 1280px;
+            margin: 0 auto;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 32px;
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .destinations-grid {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .destination-card {
+            background: var(--surface);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .destination-card:hover {
+            box-shadow: var(--shadow-2);
+            transform: translateY(-2px);
+        }
+
+        .destination-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .destination-content {
+            padding: 16px;
+        }
+
+        .destination-title {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .destination-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .destination-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Loading State */
+        .loading-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .google-spinner {
+            width: 48px;
+            height: 48px;
+            position: relative;
+            animation: rotate 2s linear infinite;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinner-blade {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .spinner-blade:nth-child(1) {
+            border: 4px solid transparent;
+            border-top-color: var(--google-blue);
+        }
+
+        .spinner-blade:nth-child(2) {
+            border: 4px solid transparent;
+            border-right-color: var(--google-red);
+            transform: rotate(45deg);
+        }
+
+        .spinner-blade:nth-child(3) {
+            border: 4px solid transparent;
+            border-bottom-color: var(--google-yellow);
+            transform: rotate(90deg);
+        }
+
+        .spinner-blade:nth-child(4) {
+            border: 4px solid transparent;
+            border-left-color: var(--google-green);
+            transform: rotate(135deg);
+        }
+
+        .loading-text {
+            margin-top: 24px;
+            font-family: 'Google Sans', sans-serif;
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* Google Colors Easter Egg */
+        .google-colors {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .color-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: bounce 1.4s ease-in-out infinite;
+        }
+
+        .color-dot:nth-child(1) { background: var(--google-blue); animation-delay: 0s; }
+        .color-dot:nth-child(2) { background: var(--google-red); animation-delay: 0.1s; }
+        .color-dot:nth-child(3) { background: var(--google-yellow); animation-delay: 0.2s; }
+        .color-dot:nth-child(4) { background: var(--google-green); animation-delay: 0.3s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header>
+    <div class="header-content">
+        <a href="/" class="logo">
+            <div class="logo-icon"></div>
+            <span>Odyssey</span>
+        </a>
+        <nav>
+            <a href="#trips" class="nav-button">My Trips</a>
+            <a href="#rewards" class="nav-button">Rewards</a>
+            <a href="#profile" class="nav-button primary">Sign in</a>
+        </nav>
+    </div>
+</header>
+
+<!-- Hero Section -->
+<main>
+    <div class="hero">
+        <h1>Plan your perfect trip</h1>
+        <p class="hero-subtitle">Powered by Google AI to create personalized travel experiences</p>
+
+        <!-- Search Container -->
+        <div class="search-container">
+            <div class="search-wrapper">
+                <div class="search-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                </div>
+                <input
+                        type="text"
+                        class="search-box"
+                        placeholder="Try &quot;art galleries in Mexico City&quot; or &quot;beach vacation under $1000&quot;"
+                        id="tripInput"
+                >
+                <button class="search-button" onclick="startPlanning()">
+                    <svg viewBox="0 0 24 24" fill="white">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Suggestion Chips -->
+        <div class="suggestions">
+            <div class="chip" onclick="fillSuggestion('Beach vacation in Bali')">
+                <span>🏖️</span>
+                <span>Beach vacation in Bali</span>
+            </div>
+            <div class="chip" onclick="fillSuggestion('Art galleries in Mexico City')">
+                <span>🎨</span>
+                <span>Art galleries in Mexico City</span>
+            </div>
+            <div class="chip" onclick="fillSuggestion('Tokyo food tour')">
+                <span>🍜</span>
+                <span>Tokyo food tour</span>
+            </div>
+            <div class="chip" onclick="fillSuggestion('Northern lights in Iceland')">
+                <span>🌌</span>
+                <span>Northern lights in Iceland</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Options Grid -->
+    <div class="options-grid">
+        <div class="option-card">
+            <div class="option-label">
+                <span>💰</span>
+                <span>Budget</span>
+            </div>
+            <div class="slider-container">
+                <input type="range" min="500" max="5000" value="1500" class="slider" id="budgetSlider">
+                <div class="slider-value">$<span id="budgetValue">1,500</span></div>
+            </div>
+        </div>
+
+        <div class="option-card">
+            <div class="option-label">
+                <span>📅</span>
+                <span>Duration</span>
+            </div>
+            <div class="slider-container">
+                <input type="range" min="2" max="21" value="7" class="slider" id="durationSlider">
+                <div class="slider-value"><span id="durationValue">7</span> days</div>
+            </div>
+        </div>
+
+        <div class="option-card">
+            <div class="option-label">
+                <span>🌡️</span>
+                <span>When to go</span>
+            </div>
+            <select class="material-select" id="seasonSelect">
+                <option value="flexible">I'm flexible</option>
+                <option value="thisMonth">This month</option>
+                <option value="nextMonth">Next month</option>
+                <option value="spring">Spring (Mar-May)</option>
+                <option value="summer">Summer (Jun-Aug)</option>
+                <option value="fall">Fall (Sep-Nov)</option>
+                <option value="winter">Winter (Dec-Feb)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Trending Destinations -->
+    <div class="trending-section">
+        <div class="section-header">
+            <h2 class="section-title">Trending destinations</h2>
+            <p class="section-subtitle">Popular with travelers right now</p>
+        </div>
+
+        <div class="destinations-grid">
+            <div class="destination-card" onclick="selectDestination('Tokyo, Japan')">
+                <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=400&h=300&fit=crop" alt="Tokyo" class="destination-image">
+                <div class="destination-content">
+                    <h3 class="destination-title">Tokyo, Japan</h3>
+                    <p class="destination-subtitle">Vibrant city life & culture</p>
+                    <div class="destination-meta">
+                        <div class="meta-item">
+                            <span>✈️</span>
+                            <span>11h from SFO</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>💰</span>
+                            <span>$1,200 avg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="destination-card" onclick="selectDestination('Mexico City, Mexico')">
+                <img src="https://images.unsplash.com/photo-1518659526054-e3619d98c1c1?w=400&h=300&fit=crop" alt="Mexico City" class="destination-image">
+                <div class="destination-content">
+                    <h3 class="destination-title">Mexico City, Mexico</h3>
+                    <p class="destination-subtitle">Art, history & amazing food</p>
+                    <div class="destination-meta">
+                        <div class="meta-item">
+                            <span>✈️</span>
+                            <span>4h from SFO</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>💰</span>
+                            <span>$600 avg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="destination-card" onclick="selectDestination('Bali, Indonesia')">
+                <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&h=300&fit=crop" alt="Bali" class="destination-image">
+                <div class="destination-content">
+                    <h3 class="destination-title">Bali, Indonesia</h3>
+                    <p class="destination-subtitle">Beaches & spiritual retreats</p>
+                    <div class="destination-meta">
+                        <div class="meta-item">
+                            <span>✈️</span>
+                            <span>17h from SFO</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>💰</span>
+                            <span>$800 avg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="destination-card" onclick="selectDestination('Barcelona, Spain')">
+                <img src="https://images.unsplash.com/photo-1562883676-8c7feb83f09b?w=400&h=300&fit=crop" alt="Barcelona" class="destination-image">
+                <div class="destination-content">
+                    <h3 class="destination-title">Barcelona, Spain</h3>
+                    <p class="destination-subtitle">Architecture & Mediterranean vibes</p>
+                    <div class="destination-meta">
+                        <div class="meta-item">
+                            <span>✈️</span>
+                            <span>12h from SFO</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>💰</span>
+                            <span>$1,100 avg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Loading State -->
+<div class="loading-container" id="loadingContainer">
+    <div class="google-spinner">
+        <div class="spinner-blade"></div>
+        <div class="spinner-blade"></div>
+        <div class="spinner-blade"></div>
+        <div class="spinner-blade"></div>
+    </div>
+    <p class="loading-text">Planning your perfect trip...</p>
+</div>
+
+<script>
+    // Budget Slider
+    const budgetSlider = document.getElementById('budgetSlider');
+    const budgetValue = document.getElementById('budgetValue');
+
+    budgetSlider.addEventListener('input', (e) => {
+        const value = parseInt(e.target.value);
+        budgetValue.textContent = value.toLocaleString();
+
+        // Update slider track fill
+        const percent = (value - 500) / (5000 - 500) * 100;
+        e.target.style.background = `linear-gradient(to right, ${getComputedStyle(document.documentElement).getPropertyValue('--google-blue')} 0%, ${getComputedStyle(document.documentElement).getPropertyValue('--google-blue')} ${percent}%, #e0e0e0 ${percent}%, #e0e0e0 100%)`;
+    });
+
+    // Duration Slider
+    const durationSlider = document.getElementById('durationSlider');
+    const durationValue = document.getElementById('durationValue');
+
+    durationSlider.addEventListener('input', (e) => {
+        durationValue.textContent = e.target.value;
+
+        // Update slider track fill
+        const percent = (e.target.value - 2) / (21 - 2) * 100;
+        e.target.style.background = `linear-gradient(to right, ${getComputedStyle(document.documentElement).getPropertyValue('--google-blue')} 0%, ${getComputedStyle(document.documentElement).getPropertyValue('--google-blue')} ${percent}%, #e0e0e0 ${percent}%, #e0e0e0 100%)`;
+    });
+
+    // Initialize sliders
+    budgetSlider.dispatchEvent(new Event('input'));
+    durationSlider.dispatchEvent(new Event('input'));
+
+    // Fill suggestion
+    function fillSuggestion(text) {
+        const input = document.getElementById('tripInput');
+        input.value = text;
+        input.focus();
+    }
+
+    // Select destination
+    function selectDestination(destination) {
+        const input = document.getElementById('tripInput');
+        input.value = `Trip to ${destination}`;
+        input.focus();
+
+        // Smooth scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Start planning
+    function startPlanning() {
+        const input = document.getElementById('tripInput').value;
+        if (!input.trim()) {
+            document.getElementById('tripInput').focus();
+            return;
+        }
+
+        // Show Google-style loading
+        document.getElementById('loadingContainer').style.display = 'flex';
+
+        // Store preferences
+        sessionStorage.setItem('tripQuery', input);
+        sessionStorage.setItem('budget', document.getElementById('budgetSlider').value);
+        sessionStorage.setItem('duration', document.getElementById('durationSlider').value);
+        sessionStorage.setItem('season', document.getElementById('seasonSelect').value);
+
+        // Simulate AI processing
+        setTimeout(() => {
+            window.location.href = 'itinerary-builder.html';
+        }, 2500);
+    }
+
+    // Enter key support
+    document.getElementById('tripInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            startPlanning();
+        }
+    });
+
+    // Add hover effects to cards
+    document.querySelectorAll('.destination-card').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-4px)';
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0)';
+        });
+    });
+</script>
+</body>
+</html>
